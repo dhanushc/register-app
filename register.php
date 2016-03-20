@@ -31,7 +31,7 @@ if(Input::exists()){
                     'unique' => 'participant'
                 ),
                 'tshirtSize' => array(
-                    'required' => true
+                    'selectOption' => true
                 )
             )
         );
@@ -93,7 +93,7 @@ if(Input::exists()){
             <div>
                 <label>T-shirt Size</label><br>
                 <select name="tshirtSize">
-                    <option>Select</option>
+                    <option value="<?php echo escape("null"); ?>">Select</option>
                     <option value="<?php echo escape("XXL"); ?>">XXL</option>
                     <option value="<?php echo escape("XL"); ?>">XL</option>
                     <option value="<?php echo escape("L"); ?>">L</option>

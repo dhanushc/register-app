@@ -98,6 +98,11 @@ class Validate {
                                 $this->addError("{$item} already exist ");
                             }
                             break;
+                        case 'selectOption':
+                            if($value == 'null'){
+                                $this->addError("Select your t-shirt size.");
+                            }
+                            break;
                     }
                 }
             }
