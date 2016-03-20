@@ -46,7 +46,7 @@ class user{
     }
 
     public function create($fields = array()) {
-        if(!$this->_db->insert('user', $fields)){
+        if(!$this->_db->insert('participant', $fields)){
             throw new Exception('There was a problem creating an account.');
         }
     }

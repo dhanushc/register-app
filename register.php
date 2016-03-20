@@ -26,49 +26,39 @@ if(Input::exists()){
     if(Token::check(Input::get('token'))) {
         $validate = new Validate();
         $validation = $validate->check($_POST, array(
-                'username' => array(
+                'email' => array(
                     'required' => true,
-                    'min' => 2,
-                    'max' => 20,
-                    'unique' => 'users'
-                ),
-                'password' => array(
-                    'required' => true,
-                    'min' => 6
-                ),
-                'password_again' => array(
-                    'required' => true,
-                    'matches' => 'password'
-                ),
-                'contact' => array(
-                    'required' => true,
-                    'min' => 10
+                    'unique' => 'participant'
                 ),
                 'tshirtSize' => array(
                     'required' => true
-                ),
+                )
             )
         );
         if($validation->passed()) {
-			$_SESSION['username'] = Input::get('username');
-            $_SESSION['password'] = Input::get('password');
-            $_SESSION['name1']    = Input::get('name1');
-            $_SESSION['name2']    = Input::get('name2');
-            $_SESSION['email']    = Input::get('email');
-            $_SESSION['contact']    = Input::get('contact');
-            $_SESSION['tshirtSize']      = Input::get('tshirtSize');
-            $_SESSION['university']      = Input::get('university');
-            $_SESSION['studentRegNo']     = Input::get('studentRegNo');
-            $_SESSION['informedMethod']     = Input::get('informedMethod');
-            Redirect::to('registerConfirm.php');
+            $user = new User();
+            try{
+                $user->create(array(
+                     'firstName' => Input::get('name1'),
+                     'lastName' => Input::get('name2'),
+                    'email'=> Input::get('email'),
+                     'contact' => Input::get('contact'),
+                       'tshirtSize' => Input::get('tshirtSize'),
+                'university'=> Input::get('university'),
+                  'studentRegNo'     => Input::get('studentRegNo'),
+                    'informedMethod'   => Input::get('informedMethod')
+                    //other data
+                ));
+
+                echo '<script type="text/javascript">alert("Registered successfully")</script>';
+            }catch (Exception $e){
+                die($e->getMessage());
+            }
         } else {
             $str = "";
             foreach ($validation->errors() as $error) {
-//                echo $error, '</ br>';
                 $str .= $error;
                 $str .= '\n';
-//                echo '<script type="text/javascript">alert("' . $error . '")</script>';
-//                echo "<div class='alert alert-danger'> $error</div>";
             }
             echo '<script type="text/javascript">alert("' . $str . '")</script>';
         }
@@ -82,20 +72,6 @@ if(Input::exists()){
         <form action="" method="post">
             <div>
                 <h3 id="signup"><strong>Sign up</strong></h3>
-            </div>
-
-            <div>
-                <label>Username</label><br>
-                <input type="text" name="username"  placeholder="Enter username" value="<?php echo Input::get('username'); ?>" autocomplete="off" >
-            </div>
-            <div>
-                <label>Password</label><br>
-                <input type="password" name="password" placeholder="Enter password">
-            </div>
-
-            <div>
-                <label>Re-Password</label><br>
-                <input type="password" name="password_again" placeholder="Enter your password again">
             </div>
 
             <div>
@@ -138,12 +114,8 @@ if(Input::exists()){
                 <label>Informed Method</label><br>
                 <input type="text" name="informedMethod" placeholder="Informed Method" value="<?php echo escape(Input::get('informedMethod')); ?>">
             </div>
-
-			<div>
-                <input type="checkbox" name="accept"> I agree to the <a href="">Terms and Conditions</a> and <a href="">Privacy Policy</a>
-            </div>
             <input type = "hidden" name="token" value="<?php echo Token::generate(); ?>">
-            <input type="submit" value="Next">
+            <input type="submit" value="Register">
         </form>
 
 </body>
